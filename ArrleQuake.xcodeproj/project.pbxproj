@@ -16,6 +16,7 @@
 		E86E697F2AC2BF1E0015F93F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E86E697E2AC2BF1E0015F93F /* Assets.xcassets */; };
 		E86E69832AC2BF1E0015F93F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E86E69822AC2BF1E0015F93F /* Preview Assets.xcassets */; };
 		E8C8D85A2AC32A08002195E4 /* ArrleQuakeC in Frameworks */ = {isa = PBXBuildFile; productRef = E8C8D8592AC32A08002195E4 /* ArrleQuakeC */; };
+		E8FFE1A42AC36D970049A5F9 /* quakecyr.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E8FFE1A32AC36D970049A5F9 /* quakecyr.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		E86E69822AC2BF1E0015F93F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E86E69892AC2BF4C0015F93F /* ArrleQuakeCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ArrleQuakeCore; sourceTree = "<group>"; };
 		E8981F352AC2D3C900468005 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E8FFE1A32AC36D970049A5F9 /* quakecyr.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = quakecyr.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 				E82645432AC2E20400C03A76 /* Resource */,
 				E8981F352AC2D3C900468005 /* Info.plist */,
 				E86E697A2AC2BF1D0015F93F /* ArrleQuakeApp.swift */,
+				E8FFE1A32AC36D970049A5F9 /* quakecyr.ttf */,
 				E86E697C2AC2BF1D0015F93F /* ContentView.swift */,
 				E86E697E2AC2BF1E0015F93F /* Assets.xcassets */,
 				E86E69802AC2BF1E0015F93F /* ArrleQuake.entitlements */,
@@ -165,6 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E86E69832AC2BF1E0015F93F /* Preview Assets.xcassets in Resources */,
+				E8FFE1A42AC36D970049A5F9 /* quakecyr.ttf in Resources */,
 				E86E697F2AC2BF1E0015F93F /* Assets.xcassets in Resources */,
 				E82645482AC2E34000C03A76 /* PAK0.PAK in Resources */,
 				E82645472AC2E34000C03A76 /* CONFIG.CFG in Resources */,

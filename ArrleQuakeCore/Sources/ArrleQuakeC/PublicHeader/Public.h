@@ -16,4 +16,9 @@ void qInit (int c, char **v);
 void VID_SetSize(int width, int height);
 void Key_Event (int key, int down);
 
+void Cbuf_AddText (const char *text);
+
+extern float g_control_rotate_x, g_control_rotate_y;
+extern float g_control_move_x, g_control_move_y;
+
 #endif /* Render_h */

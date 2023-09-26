@@ -130,7 +130,8 @@ void CL_Disconnect (void)
 
 void CL_Disconnect_f (void)
 {
-	CL_Disconnect ();
+    if (sv.active)
+        CL_Disconnect ();
 	if (sv.active)
 		Host_ShutdownServer (false);
 }

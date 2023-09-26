@@ -73,7 +73,14 @@ public final class ArrleQuakeGame {
     }
 
     func loop() -> CGImage? {
+        if gunLoop {
+            Cbuf_AddText("+attack\n")
+        }
         qLoop()
+        if gunLoop && !gunDown {
+            gunLoop = false
+            Cbuf_AddText("-attack\n")
+        }
         var image: CGImage?
         autoreleasepool {
             image = renderImage()?.takeRetainedValue()
@@ -86,86 +93,50 @@ public final class ArrleQuakeGame {
         }
     }
 
-    func audioSessionInitialization(rate: Double) throws -> Double {
-        #if canImport(UIKit)
-        let session = AVAudioSession.sharedInstance()
-        #else
-        let session = AVAudioSession()
-        #endif
-        try session.setActive(false)
-        try session.setCategory(.playAndRecord, options: .defaultToSpeaker)
-        try session.setPreferredSampleRate(rate)
-        try session.setActive(true)
-        loadAudioEngine(with: session)
-
-        try engine.start()
-
-        return session.sampleRate
-     }
-
-    private let engine = AVAudioEngine()
-
     func pressed(key: Int, down: Bool) {
         Key_Event(Int32(key), down ? 1 : 0)
     }
 
-    func loadAudioEngine(with session: AVAudioSession) {
-        let inputNode = engine.inputNode
-        let outputNode = engine.outputNode
-
-        engine.connect(inputNode, to: outputNode, format: inputNode.inputFormat(forBus: 0))
-
-
-        var asbd_player = AudioStreamBasicDescription();
-        asbd_player.mSampleRate = session.sampleRate;
-        asbd_player.mFormatID = kAudioFormatLinearPCM;
-        asbd_player.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
-        asbd_player.mFramesPerPacket = 1;
-        asbd_player.mChannelsPerFrame = 2;
-        asbd_player.mBitsPerChannel = 16;
-        asbd_player.mBytesPerPacket = 4;
-        asbd_player.mBytesPerFrame = 4;
-
-        guard let audioUnit = inputNode.audioUnit else {
-            return
-        }
-        var status = AudioUnitSetProperty(
-            audioUnit,
-            kAudioUnitProperty_StreamFormat,
-            kAudioUnitScope_Input,
-            0,
-            &asbd_player,
-            UInt32(MemoryLayout<AudioStreamBasicDescription>.size)
-        );
-        print("\(status)")
-
-
-        // Add the render callback for the ioUnit: for playing
-        var callbackStruct = AURenderCallbackStruct(
-            inputProc: recordingCallback,
-            inputProcRefCon: nil
-        )
-        status = AudioUnitSetProperty(
-            audioUnit,
-            kAudioUnitProperty_SetRenderCallback,
-            kAudioUnitScope_Input,
-            0,
-            &callbackStruct,
-            UInt32(MemoryLayout<AURenderCallbackStruct>.size)
-        );
-        print("\(status)")
-
-        engine.prepare()
+    func startNewGame() {
+        Cbuf_AddText("disconnect\n")
+        Cbuf_AddText("maxplayers 1\n")
+        Cbuf_AddText("map start\n")
     }
-}
 
-func recordingCallback(
-    inRefCon:UnsafeMutableRawPointer,
-    ioActionFlags:UnsafeMutablePointer<AudioUnitRenderActionFlags>,
-    inTimeStamp:UnsafePointer<AudioTimeStamp>,
-    inBusNumber:UInt32,
-    inNumberFrames:UInt32,
-    ioData:UnsafeMutablePointer<AudioBufferList>?
-) -> OSStatus {
-    return noErr
+    func normalization(point: CGPoint?, scale: CGFloat = 122) -> CGPoint {
+        let baseSpeed: CGFloat = scale
+        let y = -CGFloat(point?.y ?? 0) / baseSpeed
+        let x = CGFloat(point?.x ?? 0) / baseSpeed
+        var scale: CGFloat = CGFloat(1) / sqrt(x * x + y * y)
+        if scale > 1 {
+            scale = 1
+        }
+        return .init(x: max(min(x * scale, 1), -1), y: max(min(y * scale, 1), -1))
+    }
+
+    func move(_ move: CGPoint?) -> Void {
+        let norm = normalization(point: move)
+        g_control_move_y = Float(norm.y)
+        g_control_move_x = Float(norm.x)
+    }
+
+    func rotate(_ angle: CGPoint?) -> Void {
+        let norm = normalization(point: angle)
+        g_control_rotate_x = Float(norm.x)
+        g_control_rotate_y = Float(norm.y)
+    }
+
+
+    var gunDown: Bool = true
+    var gunLoop: Bool = false
+
+    func gun(down: Bool) {
+        gunDown = down
+        gunLoop = gunLoop || down
+    }
+
+
+    func multiplayer() {
+
+    }
 }
