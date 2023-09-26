@@ -93,9 +93,9 @@ public struct ArrleQuakeGameView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .offset(y: 10)
         .overlay {
             ControllerSwiftUI(game: viewModel.game)
         }
-
     }
 }

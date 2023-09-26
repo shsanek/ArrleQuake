@@ -925,6 +925,9 @@ Sbar_Draw
 */
 void Sbar_Draw (void)
 {
+#ifdef SBAR_OFF
+    return;
+#endif
 	if (scr_con_current == vid.height)
 		return;		// console is full screen
 
