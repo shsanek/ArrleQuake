@@ -418,7 +418,7 @@ void *Hunk_AllocName (int size, char *name)
 	Cache_FreeLow (hunk_low_used);
 
 	memset (h, 0, size);
-	
+
 	h->size = size;
 	h->sentinal = HUNK_SENTINAL;
 	Q_strncpy (h->name, name, 8);

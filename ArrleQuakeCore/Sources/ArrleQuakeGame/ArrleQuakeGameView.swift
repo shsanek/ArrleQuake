@@ -38,10 +38,7 @@ public struct ArrleQuakeGameView: View {
             } else {
                 EmptyView()
             }
-            if stateViewModel.state != .game {
-                Color.white.opacity(0.2)
-                    .transition(.opacity)
-            }
+            Color.white.opacity(stateViewModel.state != .game ? 0.2 : 0.0)
             InterfaceView(viewModel: viewModel)
 
         }

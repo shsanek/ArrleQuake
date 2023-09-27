@@ -426,7 +426,7 @@ void SV_ClientThink (void)
 		return;
 	}
 
-	SV_AirMove ();	
+	SV_AirMove ();
 }
 
 
@@ -494,9 +494,10 @@ nextmsg:
 			Sys_Printf ("SV_ReadClientMessage: NET_GetMessage failed\n");
 			return false;
 		}
-		if (!ret)
-			return true;
-					
+        if (!ret) {
+            return true;
+        }
+
 		MSG_BeginReading ();
 		
 		while (1)
@@ -511,7 +512,7 @@ nextmsg:
 			}	
 	
 			cmd = MSG_ReadChar ();
-			
+
 			switch (cmd)
 			{
 			case -1:

@@ -8,6 +8,7 @@ let package = Package(
     platforms: [.iOS(.v16), .macOS(.v13)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
+        .executable(name: "ArrleQuakeServer", targets: ["ArrleQuakeServer"]),
         .library(
             name: "ArrleQuakeGame",
             targets: ["ArrleQuakeGame", "ArrleQuakeC"]),
@@ -21,6 +22,10 @@ let package = Package(
         .target(
             name: "ArrleQuakeC",
             publicHeadersPath: "PublicHeader"
+        ),
+        .executableTarget(
+            name: "ArrleQuakeServer",
+            dependencies: ["ArrleQuakeC"]
         ),
         .target(
             name: "ArrleQuakeGame",

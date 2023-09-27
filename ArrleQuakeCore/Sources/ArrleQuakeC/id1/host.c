@@ -21,7 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "quakedef.h"
 #include "r_local.h"
+#include "DEFINE.h"
 
+#include "../Custom/CustomMalloc.h"
 /*
 
 A server can allways be started, even if the system started out as a client
@@ -190,8 +192,8 @@ void	Host_FindMaxClients (void)
 		svs.maxclients = MAX_SCOREBOARD;
 
 	svs.maxclientslimit = svs.maxclients;
-	if (svs.maxclientslimit < 4)
-		svs.maxclientslimit = 4;
+	if (svs.maxclientslimit < 8)
+		svs.maxclientslimit = 8;
 	svs.clients = Hunk_AllocName (svs.maxclientslimit*sizeof(client_t), "clients");
 
 	if (svs.maxclients > 1)
@@ -251,7 +253,7 @@ void Host_WriteConfiguration (void)
 // config.cfg cvars
 	if (host_initialized & !isDedicated)
 	{
-		f = fopen (va("%s/config.cfg",com_gamedir), "w");
+		f = fopen (va("%s/CONFIG.CFG",com_gamedir), "w");
 		if (!f)
 		{
 			Con_Printf ("Couldn't write config.cfg.\n");
@@ -687,6 +689,7 @@ void _Host_Frame (float time)
 
 	host_time += host_frametime;
 
+
 // fetch results from server
 	if (cls.state == ca_connected)
 	{
@@ -765,7 +768,7 @@ void Host_Frame (float time)
 //============================================================================
 
 
-extern int vcrFile;
+extern FILE* vcrFile;
 #define	VCR_SIGNATURE	0x56435231
 // "VCR1"
 
@@ -779,8 +782,8 @@ void Host_InitVCR (quakeparms_t *parms)
 		if (com_argc != 2)
 			Sys_Error("No other parameters allowed with -playback\n");
 
-		Sys_FileOpenRead("quake.vcr", &vcrFile);
-		if (vcrFile == -1)
+		int res = Sys_FileOpenRead("quake.vcr", &vcrFile);
+		if (res == -1)
 			Sys_Error("playback file not found\n");
 
 		Sys_FileRead (vcrFile, &i, sizeof(int));

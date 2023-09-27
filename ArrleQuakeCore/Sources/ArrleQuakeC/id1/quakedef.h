@@ -61,10 +61,11 @@ void	VID_UnlockBuffer (void);
 
 #endif
 
+
 #if defined __i386__ // && !defined __sun__
-#define id386	1
+#define id386    1
 #else
-#define id386	0
+#define id386    0
 #endif
 
 #if id386
@@ -93,7 +94,7 @@ void	VID_UnlockBuffer (void);
 #define	ROLL	2
 
 
-#define	MAX_QPATH		64			// max length of a quake game pathname
+#define	MAX_QPATH		512			// max length of a quake game pathname
 #define	MAX_OSPATH		512			// max length of a filesystem pathname
 
 #define	ON_EPSILON		0.1			// point on plane side epsilon

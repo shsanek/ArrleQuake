@@ -16,8 +16,13 @@ struct InterfaceView: View {
                 .transition(.opacity)
         case .game:
             ControlView(gameControll: viewModel, showControl: stateViewModel.showInterface)
+                .transition(.opacity)
         case .pause:
             PauseMenu(game: viewModel.game, stateViewModel: stateViewModel)
+                .transition(.opacity)
+        case .setting:
+            SettingMenu(game: viewModel.game, stateViewModel: stateViewModel)
+                .transition(.opacity)
         }
     }
 }

@@ -191,6 +191,8 @@ void SV_SendServerinfo (client_t *client)
 	char			**s;
 	char			message[2048];
 
+    printf("send server info\n");
+
 	MSG_WriteByte (&client->message, svc_print);
 	sprintf (message, "%c\nVERSION %4.2f SERVER (%i CRC)", 2, VERSION, pr_crc);
 	MSG_WriteString (&client->message,message);
@@ -301,6 +303,7 @@ SV_CheckForNewClients
 */
 void SV_CheckForNewClients (void)
 {
+
 	struct qsocket_s	*ret;
 	int				i;
 		
@@ -310,10 +313,12 @@ void SV_CheckForNewClients (void)
 	while (1)
 	{
 		ret = NET_CheckNewConnections ();
-		if (!ret)
-			break;
+        if (!ret) {
+            break;
+        }
 
-	// 
+        printf("start connect\n");
+	//
 	// init a new client structure
 	//	
 		for (i=0 ; i<svs.maxclients ; i++)
@@ -826,8 +831,9 @@ void SV_SendClientMessages (void)
 // build individual updates
 	for (i=0, host_client = svs.clients ; i<svs.maxclients ; i++, host_client++)
 	{
-		if (!host_client->active)
-			continue;
+        if (!host_client->active) {
+            continue;
+        }
 
 		if (host_client->spawned)
 		{
@@ -863,17 +869,17 @@ void SV_SendClientMessages (void)
 		{
 			if (!NET_CanSendMessage (host_client->netconnection))
 			{
-//				I_Printf ("can't write\n");
 				continue;
 			}
 
-			if (host_client->dropasap)
-				SV_DropClient (false);	// went to another level
-			else
-			{
-				if (NET_SendMessage (host_client->netconnection
-				, &host_client->message) == -1)
-					SV_DropClient (true);	// if the message couldn't send, kick off
+            if (host_client->dropasap) {
+                printf("drop\n");
+                SV_DropClient (false);	// went to another level
+            } else {
+				if (NET_SendMessage (host_client->netconnection, &host_client->message) == -1) {
+                    SV_DropClient (true);	// if the message couldn't send, kick off
+                    printf("drop\n");
+                }
 				SZ_Clear (&host_client->message);
 				host_client->last_message = realtime;
 				host_client->sendsignon = false;

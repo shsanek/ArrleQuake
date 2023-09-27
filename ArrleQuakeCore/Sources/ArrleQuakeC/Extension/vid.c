@@ -2,9 +2,10 @@
 
 #include "../id1/quakedef.h"
 #include "../id1/d_local.h"
+#include "../id1/DEFINE.h"
 #include <math.h>
 
-viddef_t	vid;				// global video state
+//viddef_t	vid;				// global video state
 
 #define	BASEWIDTH	320
 #define	BASEHEIGHT	200
@@ -93,7 +94,9 @@ void VID_SetSize(int width, int height)
 
     vid.recalc_refdef = 1;
 
+#ifdef CLIENT
     regenerateContext();
+#endif
 }
 
 #define COLOR(C) ( ((float)C) * (1.5f) / 255.0f )

@@ -81,14 +81,14 @@ char *pr_opnames[] =
 "LT",
 "GT", 
 
-"INDIRECT",
-"INDIRECT",
-"INDIRECT", 
-"INDIRECT", 
-"INDIRECT",
-"INDIRECT", 
+    "OP_LOAD_F",
+    "OP_LOAD_V",
+    "OP_LOAD_S",
+    "OP_LOAD_ENT",
+    "OP_LOAD_FLD",
+    "OP_LOAD_FNC",
 
-"ADDRESS", 
+"ADDRESS",
 
 "STORE_F",
 "STORE_V",
@@ -138,7 +138,6 @@ char *pr_opnames[] =
 
 char *PR_GlobalString (int ofs);
 char *PR_GlobalStringNoContents (int ofs);
-
 
 //=============================================================================
 
@@ -325,6 +324,8 @@ int PR_EnterFunction (dfunction_t *f)
 	return f->first_statement - 1;	// offset the s++
 }
 
+ddef_t *ED_GlobalAtOfs (int ofs);
+
 /*
 ====================
 PR_LeaveFunction
@@ -360,6 +361,7 @@ PR_ExecuteProgram
 */
 void PR_ExecuteProgram (func_t fnum)
 {
+    int valid;
 	eval_t	*a, *b, *c;
 	int			s;
 	dstatement_t	*st;
@@ -369,6 +371,7 @@ void PR_ExecuteProgram (func_t fnum)
 	edict_t	*ed;
 	int		exitdepth;
 	eval_t	*ptr;
+
 
 	if (!fnum || fnum >= progs->numfunctions)
 	{
@@ -402,9 +405,14 @@ while (1)
 	pr_xfunction->profile++;
 	pr_xstatement = s;
 	
-	if (pr_trace)
-		PR_PrintStatement (st);
+//    Con_Printf("\n");
+//	if (1)
+//		PR_PrintStatement (st);
 		
+//    Con_Printf("INFO <p %d><OP %d>", s, st->op);
+//    Con_Printf("<value %d-%d-%d> ", a->_int, b->_int, c->_int);
+//    Con_Printf("<reg %d-%d-%d>\n", st->a, st->b, st->c);
+
 	switch (st->op)
 	{
 	case OP_ADD_F:
@@ -558,28 +566,30 @@ while (1)
 		ptr->vector[2] = a->vector[2];
 		break;
 		
-	case OP_ADDRESS:
+    case OP_ADDRESS:
 		ed = PROG_TO_EDICT(a->edict);
 #ifdef PARANOID
 		NUM_FOR_EDICT(ed);		// make sure it's in range
 #endif
-		if (ed == (edict_t *)sv.edicts && sv.state == ss_active)
-			PR_RunError ("assignment to world entity");
-		c->_int = (byte *)((int *)&ed->v + b->_int) - (byte *)sv.edicts;
-		break;
+            if (ed == (edict_t *)sv.edicts && sv.state == ss_active)
+                PR_RunError ("assignment to world entity");
+            long m = ((byte *)((int *)&ed->v + b->_int)) - (byte *)sv.edicts;
+            c->_int = m;
+            break;
 		
 	case OP_LOAD_F:
 	case OP_LOAD_FLD:
 	case OP_LOAD_ENT:
 	case OP_LOAD_S:
 	case OP_LOAD_FNC:
-		ed = PROG_TO_EDICT(a->edict);
-#ifdef PARANOID
-		NUM_FOR_EDICT(ed);		// make sure it's in range
-#endif
-		a = (eval_t *)((int *)&ed->v + b->_int);
-		c->_int = a->_int;
-		break;
+            ed = PROG_TO_EDICT(a->edict);
+    #ifdef PARANOID
+            NUM_FOR_EDICT(ed);        // make sure it's in range
+    #endif
+            a = (eval_t *)((int *)&ed->v + b->_int);
+            valid = (a->_int < progs->numfunctions && a->_int >= 0);
+            c->_int = a->_int;
+            break;
 
 	case OP_LOAD_V:
 		ed = PROG_TO_EDICT(a->edict);

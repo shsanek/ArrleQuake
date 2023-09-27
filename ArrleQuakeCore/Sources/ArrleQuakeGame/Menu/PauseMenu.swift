@@ -17,9 +17,8 @@ struct PauseMenu: View {
             }.padding(.init(top: 16, leading: 16, bottom: 16, trailing: 16))
 
             VStack {
-                MenuButton(text: "Save") {
-                }
-                MenuButton(text: "Load") {
+                MenuButton(text: "Setting") {
+                    stateViewModel.pushState(.setting)
                 }
                 MenuButton(text: "Main menu") {
                     stateViewModel.setState(.mainMenu)

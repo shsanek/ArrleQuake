@@ -11,8 +11,8 @@ struct MainMenu: View {
                     game.startNewGame()
                     stateViewModel.setState(.game)
                 }
-                MenuButton(text: "Load") {
-
+                MenuButton(text: "Setting") {
+                    stateViewModel.pushState(.setting)
                 }
                 MenuButton(text: "Multiplayer") {
                     game.multiplayer()

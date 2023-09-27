@@ -35,8 +35,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <sys/wait.h>
 #include <sys/mman.h>
 #include <errno.h>
-
+#include "DEFINE.h"
 #include "quakedef.h"
+#include "../Custom/CustomMalloc.h"
 
 int noconinput = 0;
 int nostdout = 0;
@@ -176,12 +177,16 @@ returns -1 if not present
 */
 int    Sys_FileTime (char *path)
 {
-    struct    stat    buf;
+    FILE    *f;
 
-    if (stat (path,&buf) == -1)
-        return -1;
+    f = fopen(path, "rb");
+    if (f)
+    {
+        fclose(f);
+        return 1;
+    }
 
-    return buf.st_mtime;
+    return -1;
 }
 
 
@@ -282,23 +287,6 @@ void Sys_DebugLog(char *file, char *fmt, ...)
 //
 //}
 
-double Sys_DoubleTime (void)
-{
-    struct timeval tp;
-    struct timezone tzp;
-    static int      secbase;
-
-    gettimeofday(&tp, &tzp);
-
-    if (!secbase)
-    {
-        secbase = tp.tv_sec;
-        return tp.tv_usec/1000000.0;
-    }
-
-    return (tp.tv_sec - secbase) + tp.tv_usec/1000000.0;
-}
-
 double Sys_FloatTime (void) {
     struct timeval tv;
     gettimeofday(&tv,NULL);
@@ -380,7 +368,9 @@ void qInit (int c, char **v)
     j = COM_CheckParm("-mem");
     if (j)
         parms.memsize = (int) (Q_atof(com_argv[j+1]) * 1024 * 1024);
-    parms.membase = malloc (parms.memsize);
+
+    init_memory();
+    parms.membase = (void*)memory_container;
 
     parms.basedir = basedir;
 // caching is disabled by default, use -cachedir to enable
@@ -395,13 +385,17 @@ void qInit (int c, char **v)
 
     Sys_Init();
 
+#ifdef SERVER_ONLY
+    cls.state = ca_dedicated;
+#endif
+
     Host_Init(&parms);
 
-    oldtime = Sys_DoubleTime ();
+    oldtime = Sys_FloatTime ();
 }
 
 void qLoop(void) {
-    double newtime = Sys_DoubleTime ();
+    double newtime = Sys_FloatTime ();
     double time = newtime - oldtime;
 
     Host_Frame(time);

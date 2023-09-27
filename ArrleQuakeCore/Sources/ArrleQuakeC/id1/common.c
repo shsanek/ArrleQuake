@@ -1466,7 +1466,7 @@ int COM_FindFile (char *filename, FILE **handle, FILE **file)
 	Sys_Printf ("FindFile: can't find %s\n", filename);
 	
 	if (handle)
-		*handle = -1;
+		*handle = NULL;
 	else
 		*file = NULL;
 	com_filesize = -1;

@@ -5,6 +5,7 @@ final class StateViewModel: ObservableObject {
         case mainMenu
         case game
         case pause
+        case setting
     }
 
     static let canShowInterface: Bool = {
@@ -17,16 +18,36 @@ final class StateViewModel: ObservableObject {
         return true
     }()
 
-    @Published private(set) var showInterface: Bool = StateViewModel.canShowInterface
+    @Published var showInterface: Bool = StateViewModel.canShowInterface
     @Published private(set) var state: State = .mainMenu
 
-    func setState(_ state: State) {
-        if state != self.state {
+    var states: [State] = [.mainMenu]
+
+    private func update() {
+        if let state = states.last, state != self.state {
             UIApplication.shared.isIdleTimerDisabled = state == .game
             withAnimation {
                 self.state = state
             }
         }
+    }
+
+    func setState(_ state: State) {
+        states = [state]
+        update()
+    }
+
+    func pushState(_ state: State) {
+        states.append(state)
+        update()
+    }
+
+    func pop() {
+        guard states.count > 0 else {
+            return
+        }
+        states.removeLast()
+        update()
     }
 }
 

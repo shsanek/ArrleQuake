@@ -81,16 +81,6 @@ public final class ArrleQuakeGame {
             gamePath
 
         ]
-//        ▿ 5 elements
-//          - 0 : 
-//        "/private/var/containers/Bundle/Application/CF88FFB7-C394-48CD-90E7-8E6A5050590A/ArrleQuake.app"
-//        "/private/var/containers/Bundle/Application/B58E23C2-F558-4AC3-859F-99F4AD6E05B1/ArrleQuake.app"
-//          - 1 : "-basedir"
-//          - 2 : "/private/var/containers/Bundle/Application/CF88FFB7-C394-48CD-90E7-8E6A5050590A/ArrleQuake.app"
-//          - 3 : "-game"
-//          - 4 : "/var/mobile/Containers/Data/Application/6C815ADA-D31F-488B-A1CD-58656017B77E/Documents/game"
-//        (lldb) po args[0].count
-//        94
         print(args)
         CArgument(args).run { count, args in
             qInit(count, args)
@@ -154,7 +144,7 @@ public final class ArrleQuakeGame {
 
 
     func multiplayer() {
-        let command = "connect \"192.168.2.101:26000\""
+        let command = "connect \"89.223.68.8:26000\"\n"
         Cbuf_AddText(command)
     }
 }

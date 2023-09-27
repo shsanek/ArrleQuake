@@ -396,7 +396,7 @@ char *PR_GlobalString (int ofs)
 		sprintf (line,"%i(%s)%s", ofs, pr_strings + def->s_name, s);
 	}
 	
-	i = strlen(line);
+	i = (int)strlen(line);
 	for ( ; i<20 ; i++)
 		strcat (line," ");
 	strcat (line," ");
@@ -961,7 +961,7 @@ void ED_LoadFromFile (char *data)
 	// look for the spawn function
 		func = ED_FindFunction ( pr_strings + ent->v.classname );
 
-		if (!func)
+		if (func == NULL)
 		{
 			Con_Printf ("No spawn function for:\n");
 			ED_Print (ent);
@@ -970,8 +970,10 @@ void ED_LoadFromFile (char *data)
 		}
 
 		pr_global_struct->self = EDICT_TO_PROG(ent);
+
+
 		PR_ExecuteProgram (func - pr_functions);
-	}	
+	}
 
 	Con_DPrintf ("%i entities inhibited\n", inhibit);
 }

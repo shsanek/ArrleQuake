@@ -1,5 +1,10 @@
+#include "../id1/DEFINE.h"
+#ifdef CLIENT
+
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
+
+
 
 extern uint g_VidScreenWidth;
 extern uint g_VidScreenHeight;
@@ -81,3 +86,5 @@ CGImageRef renderImage(void) {
 
     return g_Image;
 }
+
+#endif

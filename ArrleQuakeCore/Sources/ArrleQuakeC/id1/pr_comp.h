@@ -117,7 +117,7 @@ enum {
 	OP_BITOR
 };
 
-
+#pragma pack(0)
 typedef struct statement_s
 {
 	unsigned short	op;
@@ -177,4 +177,4 @@ typedef struct
 	
 	int		entityfields;
 } dprograms_t;
-
+#pragma pack(1)

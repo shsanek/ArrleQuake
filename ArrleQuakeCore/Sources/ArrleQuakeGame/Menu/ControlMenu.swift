@@ -1,21 +1,19 @@
 import SwiftUI
 
-struct ControlMenu: View {
+struct SettingMenu: View {
     let game: ArrleQuakeGame
     let stateViewModel: StateViewModel
 
     var body: some View {
         ZStack {
             VStack {
-                MenuButton(text: "New game") {
-                    game.startNewGame()
-                    stateViewModel.setState(.game)
+                if StateViewModel.canShowInterface {
+                    ToggleButton(text: "Show ui control", handler: { isOn in
+                        stateViewModel.showInterface = isOn
+                    }, isOn: stateViewModel.showInterface)
                 }
-                MenuButton(text: "Load") {
-
-                }
-                MenuButton(text: "Multiplayer") {
-
+                MenuButton(text: "< Back") {
+                    stateViewModel.pop()
                 }
             }
         }
