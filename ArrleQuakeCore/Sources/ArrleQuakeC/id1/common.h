@@ -168,9 +168,9 @@ struct cache_user_s;
 extern	char	com_gamedir[MAX_OSPATH];
 
 void COM_WriteFile (char *filename, void *data, int len);
-int COM_OpenFile (char *filename, int *hndl);
+int COM_OpenFile (char *filename, FILE **handle);
 int COM_FOpenFile (char *filename, FILE **file);
-void COM_CloseFile (int h);
+void COM_CloseFile (FILE* h);
 
 byte *COM_LoadStackFile (char *path, void *buffer, int bufsize);
 byte *COM_LoadTempFile (char *path);

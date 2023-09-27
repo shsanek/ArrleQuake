@@ -190,56 +190,57 @@ void Sys_mkdir (char *path)
     mkdir (path, 0777);
 }
 
-int Sys_FileOpenRead (char *path, int *handle)
+int filelength (FILE *f)
 {
-    int    h;
-    struct stat    fileinfo;
+    int             pos;
+    int             end;
 
+    pos = ftell (f);
+    fseek (f, 0, SEEK_END);
+    end = ftell (f);
+    fseek (f, pos, SEEK_SET);
 
-    h = open (path, O_RDONLY, 0666);
-    *handle = h;
-    if (h == -1)
+    return end;
+}
+
+int Sys_FileOpenRead (char *path, FILE **handle)
+{
+    FILE* f = fopen(path, "rb");
+    if (!f) {
+        Sys_Warn ("Error opening %s", path);
         return -1;
-
-    if (fstat (h,&fileinfo) == -1)
-        Sys_Error ("Error fstating %s", path);
-
-    return fileinfo.st_size;
+    }
+    *handle = f;
+    return filelength(f);
 }
 
-int Sys_FileOpenWrite (char *path)
+FILE* Sys_FileOpenWrite (char *path)
 {
-    int     handle;
-
-    umask (0);
-
-    handle = open(path,O_RDWR | O_CREAT | O_TRUNC
-    , 0666);
-
-    if (handle == -1)
-        Sys_Error ("Error opening %s: %s", path,strerror(errno));
-
-    return handle;
+    FILE* f = fopen(path, "wb");
+    if (!f) {
+        Sys_Warn ("Error opening %s", path);
+    }
+    return f;
 }
 
-int Sys_FileWrite (int handle, void *src, int count)
+int Sys_FileWrite (FILE* file, void *src, int count)
 {
-    return write (handle, src, count);
+    return (int)fwrite(src, count, 1, file);
 }
 
-void Sys_FileClose (int handle)
+void Sys_FileClose (FILE* file)
 {
-    close (handle);
+    fclose(file);
 }
 
-void Sys_FileSeek (int handle, int position)
+void Sys_FileSeek (FILE* file, int position)
 {
-    lseek (handle, position, SEEK_SET);
+    fseek(file, position, SEEK_SET);
 }
 
-int Sys_FileRead (int handle, void *dest, int count)
+int Sys_FileRead (FILE* file, void *dest, int count)
 {
-    return read (handle, dest, count);
+    return (int)fread(dest, count, 1, file);
 }
 
 void Sys_DebugLog(char *file, char *fmt, ...)

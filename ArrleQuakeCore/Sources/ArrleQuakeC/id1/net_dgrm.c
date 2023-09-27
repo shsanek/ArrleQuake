@@ -1223,8 +1223,8 @@ static qsocket_t *_Datagram_Connect (char *host)
 	for (reps = 0; reps < 3; reps++)
 	{
 		SZ_Clear(&net_message);
-		// save space for the header, filled in later
-		MSG_WriteLong(&net_message, 0);
+
+        MSG_WriteLong(&net_message, 0);
 		MSG_WriteByte(&net_message, CCREQ_CONNECT);
 		MSG_WriteString(&net_message, "QUAKE");
 		MSG_WriteByte(&net_message, NET_PROTOCOL_VERSION);
@@ -1237,19 +1237,6 @@ static qsocket_t *_Datagram_Connect (char *host)
 			// if we got something, validate it
 			if (ret > 0)
 			{
-				// is it from the right place?
-//				if (sfunc.AddrCompare(&readaddr, &sendaddr) != 0)
-//				{
-//#ifdef DEBUG
-//					Con_Printf("wrong reply address\n");
-//					Con_Printf("Expected: %s\n", StrAddr (&sendaddr));
-//					Con_Printf("Received: %s\n", StrAddr (&readaddr));
-//					SCR_UpdateScreen ();
-//#endif
-//					ret = 0;
-//					continue;
-//				}
-
 				if (ret < sizeof(int))
 				{
 					ret = 0;

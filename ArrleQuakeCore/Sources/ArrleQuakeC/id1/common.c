@@ -1014,7 +1014,7 @@ being registered.
 */
 void COM_CheckRegistered (void)
 {
-	int             h;
+    FILE*             h;
 	unsigned short  check[128];
 	int                     i;
 
@@ -1214,7 +1214,7 @@ typedef struct
 typedef struct pack_s
 {
 	char    filename[MAX_OSPATH];
-	int             handle;
+	FILE*             handle;
 	int             numfiles;
 	packfile_t      *files;
 } pack_t;
@@ -1280,13 +1280,13 @@ The filename will be prefixed by the current game directory
 */
 void COM_WriteFile (char *filename, void *data, int len)
 {
-	int             handle;
+    FILE*             handle;
 	char    name[MAX_OSPATH];
 	
 	sprintf (name, "%s/%s", com_gamedir, filename);
 
 	handle = Sys_FileOpenWrite (name);
-	if (handle == -1)
+	if (handle == NULL)
 	{
 		Sys_Printf ("COM_WriteFile: failed on %s\n", name);
 		return;
@@ -1331,7 +1331,7 @@ needed.  This is for the convenience of developers using ISDN from home.
 */
 void COM_CopyFile (char *netpath, char *cachepath)
 {
-	int             in, out;
+    FILE*             in, *out;
 	int             remaining, count;
 	char    buf[4096];
 	
@@ -1362,13 +1362,14 @@ Finds the file in the search path.
 Sets com_filesize and one of handle or file
 ===========
 */
-int COM_FindFile (char *filename, int *handle, FILE **file)
+int COM_FindFile (char *filename, FILE **handle, FILE **file)
 {
 	searchpath_t    *search;
 	char            netpath[MAX_OSPATH];
 	char            cachepath[MAX_OSPATH];
 	pack_t          *pak;
-	int                     i;
+    int                 i;
+    FILE*                     tmpFile;
 	int                     findtime, cachetime;
 
 	if (file && handle)
@@ -1449,12 +1450,12 @@ int COM_FindFile (char *filename, int *handle, FILE **file)
 			}	
 
 			Sys_Printf ("FindFile: %s\n",netpath);
-			com_filesize = Sys_FileOpenRead (netpath, &i);
+			com_filesize = Sys_FileOpenRead (netpath, &tmpFile);
 			if (handle)
-				*handle = i;
+				*handle = tmpFile;
 			else
 			{
-				Sys_FileClose (i);
+				Sys_FileClose (tmpFile);
 				*file = fopen (netpath, "rb");
 			}
 			return com_filesize;
@@ -1482,7 +1483,7 @@ returns a handle and a length
 it may actually be inside a pak file
 ===========
 */
-int COM_OpenFile (char *filename, int *handle)
+int COM_OpenFile (char *filename, FILE **handle)
 {
 	return COM_FindFile (filename, handle, NULL);
 }
@@ -1507,7 +1508,7 @@ COM_CloseFile
 If it is a pak file handle, don't really close it
 ============
 */
-void COM_CloseFile (int h)
+void COM_CloseFile (FILE* h)
 {
 	searchpath_t    *s;
 	
@@ -1532,7 +1533,7 @@ byte    *loadbuf;
 int             loadsize;
 byte *COM_LoadFile (char *path, int usehunk)
 {
-	int             h;
+    FILE*             h;
 	byte    *buf;
 	char    base[32];
 	int             len;
@@ -1541,7 +1542,7 @@ byte *COM_LoadFile (char *path, int usehunk)
 
 // look for it in the filesystem or pack files
 	len = COM_OpenFile (path, &h);
-	if (h == -1)
+	if (len == -1)
 		return NULL;
 	
 // extract the filename base name for hunk tag
@@ -1623,7 +1624,7 @@ pack_t *COM_LoadPackFile (char *packfile)
 	packfile_t              *newfiles;
 	int                             numpackfiles;
 	pack_t                  *pack;
-	int                             packhandle;
+	FILE*                             packhandle;
 	dpackfile_t             info[MAX_FILES_IN_PACK];
 	unsigned short          crc;
 

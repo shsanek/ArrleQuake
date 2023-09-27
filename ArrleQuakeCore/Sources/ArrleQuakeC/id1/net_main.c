@@ -80,7 +80,7 @@ cvar_t	config_modem_hangup = {"_config_modem_hangup", "AT H", true};
 cvar_t	idgods = {"idgods", "0"};
 #endif
 
-int	vcrFile = -1;
+FILE*	vcrFile = NULL;
 qboolean recording = false;
 
 // these two macros are to make the code more readable
@@ -914,7 +914,7 @@ void		NET_Shutdown (void)
 		}
 	}
 
-	if (vcrFile != -1)
+	if (vcrFile != NULL)
 	{
 		Con_Printf ("Closing vcrfile.\n");
 		Sys_FileClose(vcrFile);
