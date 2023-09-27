@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct MainMenu: View {
+struct ControlMenu: View {
     let game: ArrleQuakeGame
     let stateViewModel: StateViewModel
 
@@ -15,8 +15,7 @@ struct MainMenu: View {
 
                 }
                 MenuButton(text: "Multiplayer") {
-                    game.multiplayer()
-                    stateViewModel.setState(.game)
+
                 }
             }
         }

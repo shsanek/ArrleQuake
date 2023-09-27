@@ -11,6 +11,7 @@
 		E82645472AC2E34000C03A76 /* CONFIG.CFG in Resources */ = {isa = PBXBuildFile; fileRef = E82645442AC2E34000C03A76 /* CONFIG.CFG */; };
 		E82645482AC2E34000C03A76 /* PAK0.PAK in Resources */ = {isa = PBXBuildFile; fileRef = E82645452AC2E34000C03A76 /* PAK0.PAK */; };
 		E82645492AC2E34000C03A76 /* AUTOEXEC.CFG in Resources */ = {isa = PBXBuildFile; fileRef = E82645462AC2E34000C03A76 /* AUTOEXEC.CFG */; };
+		E8276CA22AC4400E0038423F /* resource.json in Resources */ = {isa = PBXBuildFile; fileRef = E8276CA12AC43ECE0038423F /* resource.json */; };
 		E86E697B2AC2BF1D0015F93F /* ArrleQuakeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86E697A2AC2BF1D0015F93F /* ArrleQuakeApp.swift */; };
 		E86E697D2AC2BF1D0015F93F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86E697C2AC2BF1D0015F93F /* ContentView.swift */; };
 		E86E697F2AC2BF1E0015F93F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E86E697E2AC2BF1E0015F93F /* Assets.xcassets */; };
@@ -23,6 +24,7 @@
 		E82645442AC2E34000C03A76 /* CONFIG.CFG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CONFIG.CFG; sourceTree = "<group>"; };
 		E82645452AC2E34000C03A76 /* PAK0.PAK */ = {isa = PBXFileReference; lastKnownFileType = file; path = PAK0.PAK; sourceTree = "<group>"; };
 		E82645462AC2E34000C03A76 /* AUTOEXEC.CFG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AUTOEXEC.CFG; sourceTree = "<group>"; };
+		E8276CA12AC43ECE0038423F /* resource.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = resource.json; sourceTree = "<group>"; };
 		E86E69772AC2BF1D0015F93F /* ArrleQuake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArrleQuake.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E86E697A2AC2BF1D0015F93F /* ArrleQuakeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrleQuakeApp.swift; sourceTree = "<group>"; };
 		E86E697C2AC2BF1D0015F93F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 				E82645462AC2E34000C03A76 /* AUTOEXEC.CFG */,
 				E82645442AC2E34000C03A76 /* CONFIG.CFG */,
 				E82645452AC2E34000C03A76 /* PAK0.PAK */,
+				E8276CA12AC43ECE0038423F /* resource.json */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 				E82645482AC2E34000C03A76 /* PAK0.PAK in Resources */,
 				E82645472AC2E34000C03A76 /* CONFIG.CFG in Resources */,
 				E82645492AC2E34000C03A76 /* AUTOEXEC.CFG in Resources */,
+				E8276CA22AC4400E0038423F /* resource.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,7 +333,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -369,7 +373,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;

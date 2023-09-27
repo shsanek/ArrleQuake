@@ -192,22 +192,23 @@ void Sys_mkdir (char *path)
 
 int filelength (FILE *f)
 {
-    int             pos;
-    int             end;
+    long             pos;
+    long             end;
 
     pos = ftell (f);
     fseek (f, 0, SEEK_END);
     end = ftell (f);
     fseek (f, pos, SEEK_SET);
 
-    return end;
+    return (int)end;
 }
 
 int Sys_FileOpenRead (char *path, FILE **handle)
 {
     FILE* f = fopen(path, "rb");
     if (!f) {
-        Sys_Warn ("Error opening %s", path);
+        Sys_Warn ("Warning opening %s\n", path);
+        handle = NULL;
         return -1;
     }
     *handle = f;
@@ -218,7 +219,7 @@ FILE* Sys_FileOpenWrite (char *path)
 {
     FILE* f = fopen(path, "wb");
     if (!f) {
-        Sys_Warn ("Error opening %s", path);
+        Sys_Warn ("Warning opening %s\n", path);
     }
     return f;
 }

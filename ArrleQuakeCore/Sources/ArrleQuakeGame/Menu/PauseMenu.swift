@@ -14,7 +14,8 @@ struct PauseMenu: View {
                     Spacer()
                 }
                 Spacer()
-            }.safeAreaPadding()
+            }.padding(.init(top: 16, leading: 16, bottom: 16, trailing: 16))
+
             VStack {
                 MenuButton(text: "Save") {
                 }

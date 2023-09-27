@@ -34,7 +34,7 @@ struct CArgument {
 
 public final class ArrleQuakeGame {
     #if canImport(UIKit)
-    let path = Bundle.main.bundlePath
+    let path = Bundle.main.resourceURL!
     #else
     let path = Bundle.main.bundlePath + "/Contents/Resources"
     #endif
@@ -44,22 +44,55 @@ public final class ArrleQuakeGame {
         start()
     }
 
+    private lazy var baseDir = documentsPath + "/game"
+
+    private func copyFromURL(_ url: URL) throws {
+        let targetURL = URL(filePath: baseDir)
+//        if FileManager.default.fileExists(atPath: baseDir) {
+//            return
+//        }
+        try? FileManager.default.createDirectory(
+            at: targetURL,
+            withIntermediateDirectories: true,
+            attributes: nil
+        )
+        let files = try JSONDecoder().decode([String].self, from: Data(contentsOf: url.appending(path: "resource.json")))
+        for file in files {
+            let fileURL = url.appending(path: file)
+            let data = try Data(contentsOf: fileURL)
+            try data.write(to: targetURL.appending(path: file))
+        }
+    }
+
     func start() {
-        let gamePath = documentsPath + "/game"
+        let gamePath = baseDir + "/tmp"
         try? FileManager.default.createDirectory(
             atPath: gamePath,
             withIntermediateDirectories: true,
             attributes: nil
         )
+        try! copyFromURL(path)
 
-        CArgument([
-            path,
+        let args = [
+            baseDir,
             "-basedir",
-            path,
+            baseDir,
             "-game",
             gamePath
 
-        ]).run { count, args in
+        ]
+//        ▿ 5 elements
+//          - 0 : 
+//        "/private/var/containers/Bundle/Application/CF88FFB7-C394-48CD-90E7-8E6A5050590A/ArrleQuake.app"
+//        "/private/var/containers/Bundle/Application/B58E23C2-F558-4AC3-859F-99F4AD6E05B1/ArrleQuake.app"
+//          - 1 : "-basedir"
+//          - 2 : "/private/var/containers/Bundle/Application/CF88FFB7-C394-48CD-90E7-8E6A5050590A/ArrleQuake.app"
+//          - 3 : "-game"
+//          - 4 : "/var/mobile/Containers/Data/Application/6C815ADA-D31F-488B-A1CD-58656017B77E/Documents/game"
+//        (lldb) po args[0].count
+//        94
+        print(args)
+        CArgument(args).run { count, args in
             qInit(count, args)
         }
         #if canImport(UIKit)
@@ -120,5 +153,8 @@ public final class ArrleQuakeGame {
     }
 
 
-    func multiplayer() {}
+    func multiplayer() {
+        let command = "connect \"192.168.2.101:26000\""
+        Cbuf_AddText(command)
+    }
 }

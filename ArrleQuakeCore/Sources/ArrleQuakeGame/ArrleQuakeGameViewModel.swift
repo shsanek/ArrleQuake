@@ -7,10 +7,22 @@ final class StateViewModel: ObservableObject {
         case pause
     }
 
+    static let canShowInterface: Bool = {
+        #if os(macOS)
+        return false
+        #endif
+        if ProcessInfo().isMacCatalystApp {
+            return false
+        }
+        return true
+    }()
+
+    @Published private(set) var showInterface: Bool = StateViewModel.canShowInterface
     @Published private(set) var state: State = .mainMenu
 
     func setState(_ state: State) {
         if state != self.state {
+            UIApplication.shared.isIdleTimerDisabled = state == .game
             withAnimation {
                 self.state = state
             }
@@ -18,14 +30,16 @@ final class StateViewModel: ObservableObject {
     }
 }
 
-public final class ArrleQuakeGameViewModel: ObservableObject, IGameControl {
+public final class ArrleQuakeGameViewModel: ObservableObject {
     @Published var image: Image? = nil
 
     let game: ArrleQuakeGame
     let state: StateViewModel = .init()
+    private(set) lazy var joystickController = JoystickController(pool: self)
 
     public init(game: ArrleQuakeGame) {
         self.game = game
+        joystickController.run()
         DispatchQueue.main.async {
             self.loop()
         }
@@ -43,7 +57,18 @@ public final class ArrleQuakeGameViewModel: ObservableObject, IGameControl {
             self.loop()
         }
     }
+}
 
+extension ArrleQuakeGameViewModel: IGamesControlPoll {
+    func getGameControlForNewPlayer() -> IGameControl {
+        return self
+    }
+
+    func removeGameControl(_ game: IGameControl) {
+    }
+}
+
+extension ArrleQuakeGameViewModel: IGameControl {
     func pause() {
         state.setState(.pause)
     }

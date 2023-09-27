@@ -18,13 +18,23 @@ final class KeyboardControllerVC: UIViewController {
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         for press in presses {
-            game.pressed(key: press.key!.keyCode.rawValue, down: true)
+            if var key = press.key?.keyCode {
+                if key == .keyboardNonUSBackslash {
+                    key = .keyboardEscape
+                }
+                game.pressed(key: key.rawValue, down: true)
+            }
         }
     }
 
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         for press in presses {
-            game.pressed(key: press.key!.keyCode.rawValue, down: false)
+            if var key = press.key?.keyCode {
+                if key == .keyboardNonUSBackslash {
+                    key = .keyboardEscape
+                }
+                game.pressed(key: key.rawValue, down: false)
+            }
         }
     }
 }

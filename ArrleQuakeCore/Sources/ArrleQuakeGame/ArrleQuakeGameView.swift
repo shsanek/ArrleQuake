@@ -42,15 +42,8 @@ public struct ArrleQuakeGameView: View {
                 Color.white.opacity(0.2)
                     .transition(.opacity)
             }
-            switch stateViewModel.state {
-            case .mainMenu:
-                MainMenu(game: viewModel.game, stateViewModel: stateViewModel)
-                    .transition(.opacity)
-            case .game:
-                ControlView(gameControll: viewModel)
-            case .pause:
-                PauseMenu(game: viewModel.game, stateViewModel: stateViewModel)
-            }
+            InterfaceView(viewModel: viewModel)
+
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .offset(y: 10)

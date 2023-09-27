@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ControlView: View {
     let gameControll: IGameControl
+    let showControl: Bool
 
     var body: some View {
         VStack {
@@ -12,22 +13,25 @@ struct ControlView: View {
                 Spacer()
             }
             Spacer()
-            HStack {
-                Spacer()
-                RoundedButton("slowmo") {
-                    gameControll.gun($0)
+            if showControl {
+                HStack {
+                    Spacer()
+                    RoundedButton("slowmo") {
+                        gameControll.gun($0)
+                    }
+                }.offset(y: -10)
+                HStack {
+                    TrigerView { point in
+                        gameControll.move(point.normalization(maxValue: 122))
+                    }.shadow(radius: 5.0)
+                    Spacer()
+                    TrigerView { point in
+                        gameControll.rotate(point.normalization(maxValue: 122))
+                    }.shadow(radius: 5.0)
                 }
-            }.offset(y: -10)
-            HStack {
-                TrigerView { point in
-                    gameControll.move(point.normalization(maxValue: 122))
-                }.shadow(radius: 5.0)
-                Spacer()
-                TrigerView { point in
-                    gameControll.rotate(point.normalization(maxValue: 122))
-                }.shadow(radius: 5.0)
             }
-        }.safeAreaPadding()
+        }.padding(.init(top: 16, leading: 16, bottom: 16, trailing: 16))
+
     }
 }
 

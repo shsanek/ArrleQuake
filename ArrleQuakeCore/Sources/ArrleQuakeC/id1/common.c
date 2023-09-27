@@ -1014,14 +1014,14 @@ being registered.
 */
 void COM_CheckRegistered (void)
 {
-    FILE*             h;
+    FILE*             h = NULL;
 	unsigned short  check[128];
 	int                     i;
 
-	COM_OpenFile("gfx/pop.lmp", &h);
+	int res = COM_OpenFile("gfx/pop.lmp", &h);
 	static_registered = 0;
 
-	if (h == -1)
+	if (res == -1)
 	{
 #if WINDED
 	Sys_Error ("This dedicated server requires a full registered copy of Quake");
@@ -1542,9 +1542,11 @@ byte *COM_LoadFile (char *path, int usehunk)
 
 // look for it in the filesystem or pack files
 	len = COM_OpenFile (path, &h);
-	if (len == -1)
-		return NULL;
-	
+    if (len == -1) {
+        printf("FILE not load %s\n", path);
+        return NULL;
+    }
+
 // extract the filename base name for hunk tag
 	COM_FileBase (path, base);
 	
