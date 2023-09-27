@@ -42,7 +42,6 @@ public final class ArrleQuakeGame {
 
     public init() {
         start()
-        // try! audioSessionInitialization(rate: 22050)
     }
 
     func start() {
@@ -98,32 +97,17 @@ public final class ArrleQuakeGame {
     }
 
     func startNewGame() {
-        Cbuf_AddText("disconnect\n")
-        Cbuf_AddText("maxplayers 1\n")
-        Cbuf_AddText("map start\n")
+        Cbuf_AddText("disconnect\nmaxplayers 1\nmap start\n")
     }
 
-    func normalization(point: CGPoint?, scale: CGFloat = 122) -> CGPoint {
-        let baseSpeed: CGFloat = scale
-        let y = -CGFloat(point?.y ?? 0) / baseSpeed
-        let x = CGFloat(point?.x ?? 0) / baseSpeed
-        var scale: CGFloat = CGFloat(1) / sqrt(x * x + y * y)
-        if scale > 1 {
-            scale = 1
-        }
-        return .init(x: max(min(x * scale, 1), -1), y: max(min(y * scale, 1), -1))
+    func move(_ move: CGPoint) -> Void {
+        g_control_move_y = Float(move.y)
+        g_control_move_x = Float(move.x)
     }
 
-    func move(_ move: CGPoint?) -> Void {
-        let norm = normalization(point: move)
-        g_control_move_y = Float(norm.y)
-        g_control_move_x = Float(norm.x)
-    }
-
-    func rotate(_ angle: CGPoint?) -> Void {
-        let norm = normalization(point: angle)
-        g_control_rotate_x = Float(norm.x)
-        g_control_rotate_y = Float(norm.y)
+    func rotate(_ angle: CGPoint) -> Void {
+        g_control_rotate_x = Float(angle.x)
+        g_control_rotate_y = Float(angle.y)
     }
 
 
@@ -136,7 +120,5 @@ public final class ArrleQuakeGame {
     }
 
 
-    func multiplayer() {
-
-    }
+    func multiplayer() {}
 }
