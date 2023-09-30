@@ -348,12 +348,16 @@ int UDP_Connect (int socket, struct qsockaddr *addr)
         usleep(0.2 * 1000000.0);
     }
 
+    if (errno == ECONNREFUSED) {
+        close(pack->sock);
+        pack->sock = -1;
+        return -1;
+    }
 
-    if (ret != -1) {
-        qboolean _true = true;
-
-    } else {
+    if (ret == -1) {
         printf("connect error %d\n", errno);
+        close(pack->sock);
+        pack->sock = -1;
     }
 
 	return ret;
