@@ -43,7 +43,7 @@ sendMessage "Стопанулось?"
 
 scp .build/$BUILD_TYPE/ArrleQuakeServer ../../run/$BUILD_TYPE/server
 
-tryes=10
+tryes=100
 
 while [ "$ARRLE_STOP" != "STOP" ] && [ "$tryes" -gt 0 ]; do
     sendMessage "Цикл демона. Осталось попыток: ${tryes}\"}"
